@@ -2,6 +2,9 @@
   "name": "hh-common-ajax",
   "description": "common ajax has simple interface",
   "main": "hh-common-ajax.html",
+  "authors": [
+    "LeeJongHo <jhleed@radnet.kr>"
+  ],
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "iron-ajax": "PolymerElements/iron-ajax#^2.0.2"
