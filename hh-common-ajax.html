@@ -1,36 +1,41 @@
-<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="bower_components/polymer/polymer-element.html">
 
 <dom-module id="hh-common-ajax">
-  <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h2>Hello [[prop1]]!</h2>
-  </template>
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <h2>Hello [[prop1]]!</h2>
+    </template>
 
-  <script>
-    /**
-     * `hh-common-ajax`
-     * common ajax has simple interface
-     *
-     * @customElement
-     * @polymer
-     * @demo demo/index.html
-     */
-    class HhCommonAjax extends Polymer.Element {
-      static get is() { return 'hh-common-ajax'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'hh-common-ajax'
-          }
-        };
-      }
-    }
+    <script>
+        (function () {
+            /**
+             * `hh-common-ajax`
+             * common ajax has simple interface
+             *
+             * @customElement
+             * @polymer
+             * @demo demo/index.html
+             */
+            class HHCommonAjax extends Polymer.Element {
+                static get is() {
+                    return 'hh-common-ajax';
+                }
 
-    window.customElements.define(HhCommonAjax.is, HhCommonAjax);
-  </script>
+                static get properties() {
+                    return {
+                        prop1: {
+                            type: String,
+                            value: 'hh-common-ajax'
+                        }
+                    };
+                }
+            }
+
+            window.customElements.define(HHCommonAjax.is, HHCommonAjax);
+        })();
+    </script>
 </dom-module>
