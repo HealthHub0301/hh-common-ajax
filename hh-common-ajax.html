@@ -50,7 +50,8 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                          * 여기서의 기본값은 iron-ajax의 기본값과 동일함
                          */
                         dataType: {
-                            type: String
+                            type: String,
+                            value : "text"
                         },
                         contentType : {
                             type : String,
@@ -97,6 +98,10 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                         return;
                     }
                     _this.url = url;
+
+                    if(option.dataType){
+                        _this.dataType = option.dataType;
+                    }
 
                     _this.hasBeforeSend = !!(option.beforeSend);
                     if (_this.hasBeforeSend) {
