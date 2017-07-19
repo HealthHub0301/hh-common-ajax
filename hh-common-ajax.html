@@ -92,28 +92,31 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                 }
 
                 call (option){
-                    let url = option.url;
-                    if(!url){
-                        console.error("요청에 필요한 url이 정의되지 않았습니다.");
-                        return;
-                    }
-                    _this.url = url;
-
-                    if(option.dataType){
-                        _this.dataType = option.dataType;
-                    }
-
-                    _this.hasBeforeSend = !!(option.beforeSend);
-                    if (_this.hasBeforeSend) {
-                        _this.beforeSend = option.beforeSend;
-                    }
-
-                    ajaxComponent.generateRequest().completes.then(function (xhr) {
-                        let response = xhr.response;
-                        let successCallback = option.success;
-                        if(successCallback){
-                            successCallback(response);
+                    return new Promise(function (resolve, reject) {
+                        let url = option.url;
+                        if(!url){
+                            throw new Error("요청에 필요한 url이 정의되지 않았습니다.");
                         }
+                        _this.url = url;
+
+                        if(option.dataType){
+                            _this.dataType = option.dataType;
+                        }
+
+                        _this.hasBeforeSend = !!(option.beforeSend);
+                        if (_this.hasBeforeSend) {
+                            _this.beforeSend = option.beforeSend;
+                        }
+
+                        ajaxComponent.generateRequest().completes.then(function (xhr) {
+                            let response = xhr.response;
+                            let successCallback = option.success;
+                            let callbackResponse;
+                            if(successCallback){
+                                callbackResponse = successCallback(response);
+                            }
+                            resolve(callbackResponse);
+                        });
                     });
                 }
             }
