@@ -87,10 +87,7 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                             type : Function
                         },
                         headers : {
-                            type : Object,
-                            value : {
-                                Authorization : localStorage.getItem("jwt_token")
-                            }
+                            type : Object
                         },
                         hasBeforeSend : {
                             type : Boolean,
@@ -137,6 +134,8 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                         if (_this.hasBeforeSend) {
                             _this.beforeSend = option.beforeSend;
                         }
+
+                        ajaxComponent.headers["Authorization"] = localStorage.getItem("jwt_token");
 
                         ajaxComponent.generateRequest().completes.then(function (xhr) {
                             let response = xhr.response;
