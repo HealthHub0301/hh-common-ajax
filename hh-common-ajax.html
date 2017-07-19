@@ -20,7 +20,8 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
         <style></style>
         <iron-ajax id="ajax"
                    url="{{url}}"
-                   handle-as="{{dataType}}">
+                   handle-as="{{dataType}}"
+                   headers="{{headers}}">
         </iron-ajax>
     </template>
 
@@ -82,12 +83,14 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                             type : Function,
                             value : null
                         },
-                        //해당 옵션이 true로 들어오는 경우 promise 객체를 넘겨줌
-                        promise : {
-
-                        },
                         beforeSend : {
                             type : Function
+                        },
+                        headers : {
+                            type : Object,
+                            value : {
+                                Authorization : localStorage.getItem("jwt_token")
+                            }
                         },
                         hasBeforeSend : {
                             type : Boolean,
