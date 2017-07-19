@@ -18,9 +18,12 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
 <dom-module id="hh-common-ajax">
     <template>
         <style></style>
+        <!--TODO iron-ajax는 없앴다가 call 요청시마다 다시 생성시키는 방식으로 사용해야 함. 기존 값을 전부 초기화시키기 위함-->
         <iron-ajax id="ajax"
                    url="{{url}}"
                    handle-as="{{dataType}}"
+                   method="{{type}}"
+                   content-type="{{contentType}}"
                    headers="{{headers}}">
         </iron-ajax>
     </template>
@@ -44,11 +47,6 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
 
                 static get properties() {
                     return {
-                        url : String,
-                        type : String,
-                        data : {},
-                        success :{},
-
                         /**
                          * API 서버의 주소
                          */
@@ -79,16 +77,7 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                             type : String,
                             value : "application/x-www-form-urlencoded; charset=UTF-8"
                         },
-                        success : {
-                            type : Function,
-                            value : null
-                        },
-                        beforeSend : {
-                            type : Function
-                        },
-                        headers : {
-                            type : Object
-                        },
+                        beforeSend : Function,
                         hasBeforeSend : {
                             type : Boolean,
                             value : false
@@ -133,6 +122,11 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                         _this.hasBeforeSend = !!(option.beforeSend);
                         if (_this.hasBeforeSend) {
                             _this.beforeSend = option.beforeSend;
+                        }
+
+                        if(option.data){
+                            ajaxComponent.contentType = "application/json";
+                            ajaxComponent.body = option.data;
                         }
 
                         ajaxComponent.headers["Authorization"] = localStorage.getItem("jwt_token");
