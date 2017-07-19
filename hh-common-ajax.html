@@ -120,8 +120,10 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                             let callbackResponse;
                             if(successCallback){
                                 callbackResponse = successCallback(response);
+                                resolve(callbackResponse);
+                            } else {
+                                resolve(xhr.response);
                             }
-                            resolve(callbackResponse);
                         });
                     });
                 }
