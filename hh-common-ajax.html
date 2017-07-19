@@ -19,13 +19,7 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
     <template>
         <style></style>
         <!--TODO iron-ajax는 없앴다가 call 요청시마다 다시 생성시키는 방식으로 사용해야 함. 기존 값을 전부 초기화시키기 위함-->
-        <iron-ajax id="ajax"
-                   url="{{url}}"
-                   handle-as="{{dataType}}"
-                   method="{{type}}"
-                   content-type="{{contentType}}"
-                   headers="{{headers}}">
-        </iron-ajax>
+        <iron-ajax id="ajax"></iron-ajax>
     </template>
 
     <script>
@@ -64,19 +58,6 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                                 }
                             }
                         },
-
-                        /**
-                         * 서버에서 예상하는 데이터의 유형. jquery에서는 기본값으로 응답의 MIME 타입을 통하여 유추한다.
-                         * 여기서의 기본값은 iron-ajax의 기본값과 동일함
-                         */
-                        dataType: {
-                            type: String,
-                            value : "text"
-                        },
-                        contentType : {
-                            type : String,
-                            value : "application/x-www-form-urlencoded; charset=UTF-8"
-                        },
                         beforeSend : Function,
                         hasBeforeSend : {
                             type : Boolean,
@@ -110,13 +91,13 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
 
                         //자기 자신이 아닌 다른 도메인으로 붙는 경우
                         if (option.remote) {
-                            _this.url = _this.remote + url;
+                            ajaxComponent.url = _this.remote + url;
                         } else {
-                            _this.url = url;
+                            ajaxComponent.url = url;
                         }
 
                         if(option.dataType){
-                            _this.dataType = option.dataType;
+                            ajaxComponent.handleAs = option.dataType;
                         }
 
                         _this.hasBeforeSend = !!(option.beforeSend);
