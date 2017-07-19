@@ -110,6 +110,8 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                             ajaxComponent.body = option.data;
                         }
 
+                        ajaxComponent.method = option.type;
+
                         ajaxComponent.headers["Authorization"] = localStorage.getItem("jwt_token");
 
                         ajaxComponent.generateRequest().completes.then(function (xhr) {
