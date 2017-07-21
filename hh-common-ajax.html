@@ -80,6 +80,11 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                             _this.beforeSend(xhr);
                         }
                     });
+                    ajaxComponent.addEventListener("error", function (event) {
+                        let response = event.detail.request.xhr.response;
+                        let url = event.detail.request.url;
+                        // Error capture. 그러나 call에서 바로 잡도록 처리하는것이 에러 처리하기에 제일 좋은데.
+                    });
                 }
 
                 call (option){
@@ -113,16 +118,15 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                         ajaxComponent.method = option.type;
 
                         ajaxComponent.headers["Authorization"] = localStorage.getItem("jwt_token");
-
-                        ajaxComponent.generateRequest().completes.then(function (xhr) {
-                            let response = xhr.response;
+                        ajaxComponent.generateRequest().completes.then(function (result) {
+                            let response = result.response;
                             let successCallback = option.success;
                             let callbackResponse;
                             if(successCallback){
                                 callbackResponse = successCallback(response);
                                 resolve(callbackResponse);
                             } else {
-                                resolve(xhr.response);
+                                resolve(result.response);
                             }
                         });
                     });
