@@ -119,9 +119,14 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                         ajaxComponent.method = option.type;
 
                         ajaxComponent.headers["Authorization"] = localStorage.getItem("jwt_token");
-                        let ironRequest = ajaxComponent.generateRequest();
-                        ironRequest.completes.then(function (result) {
+                        ajaxComponent.generateRequest().completes.then(function (result) {
                             let response = result.response;
+                            if(!result.succeeded){
+                                reject({
+                                    url : url,
+                                    result : "status code is " + result.status
+                                });
+                            }
                             let successCallback = option.success;
                             let callbackResponse;
                             if(successCallback){
@@ -131,6 +136,7 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                                 resolve(result.response);
                             }
                         }).catch(function (result) {
+                            //TODO response의 내용을 가져오면 좋을텐데.. 어떻게 가져오나?
                             reject({
                                 url : url,
                                 result :result
