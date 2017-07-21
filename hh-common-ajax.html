@@ -88,6 +88,7 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                     });
                 }
 
+                //FIXME 이름 변경해야 함. call은 너무 흔한 이름이라 소스 추적이 안되는 자바스크립트의 특징상 나중에 찾아서 고치기 어려움
                 call (option){
                     return new Promise(function (resolve, reject) {
                         let url = option.url;
@@ -119,29 +120,35 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                         ajaxComponent.method = option.type;
 
                         ajaxComponent.headers["Authorization"] = localStorage.getItem("jwt_token");
-                        ajaxComponent.generateRequest().completes.then(function (result) {
+                        ajaxComponent.generateRequest().completes.then(whenSuccess).catch(whenCatchError);
+
+                        function whenSuccess(result) {
                             let response = result.response;
-                            if(!result.succeeded){
+                            if (!result.succeeded) {
                                 reject({
-                                    url : url,
-                                    result : "status code is " + result.status
+                                    url: url,
+                                    result: "status code is " + result.status
                                 });
                             }
                             let successCallback = option.success;
                             let callbackResponse;
-                            if(successCallback){
+                            if (successCallback) {
                                 callbackResponse = successCallback(response);
                                 resolve(callbackResponse);
                             } else {
                                 resolve(result.response);
                             }
-                        }).catch(function (result) {
-                            //TODO response의 내용을 가져오면 좋을텐데.. 어떻게 가져오나?
+                        }
+
+                        function whenCatchError(result) {
+                            //TODO response의 내용을 가져오면 좋을텐데.. 어떻게 가져오나? 왜 이곳에서는 외부의 context를 가져올 수 없지?
+                            //ajaxComponent.addEventListener("error" 에서 url이랑 xhr을 전체변수로 던지자. 여기서 캐치한 url랑 비교해서 동일하면 원인 ㅇㅇ.. 안된다.
+                            //call 내부에 있는 스코프밖에 접근 못함. (why?) 이러면 sessionStorage에 값 저장해서 비교하는 수밖에 없는데 별로 좋은 방법이 아닌데..
                             reject({
-                                url : url,
-                                result :result
+                                url: url,
+                                result: result
                             });
-                        });
+                        }
                     });
                 }
             }
