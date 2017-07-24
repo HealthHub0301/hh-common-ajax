@@ -106,8 +106,8 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                         ajax.method = option.type;
 
                         ajax.headers["Authorization"] = localStorage.getItem("jwt_token");
-                        ajax.generateRequest().completes.then(whenSuccess).catch(whenCatchError);
 
+                        //해당 이벤트 핸들러를 generateRequest 보다 밑에 선언하면 이벤트 바인딩이 정상적으로 동작하지 않는다.
                         ajax.addEventListener("iron-ajax-presend", function (event) {
                             if(_this.hasBeforeSend){
                                 let xhr = event.detail.request.xhr;
@@ -124,6 +124,8 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                                 result: message
                             });
                         });
+
+                        ajax.generateRequest().completes.then(whenSuccess).catch(whenCatchError);
 
                         function whenSuccess(result) {
                             let response = result.response;
