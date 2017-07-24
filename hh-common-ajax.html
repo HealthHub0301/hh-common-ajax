@@ -73,8 +73,7 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                     super.ready();
                 }
 
-                //FIXME 이름 변경해야 함. call은 너무 흔한 이름이라 소스 추적이 안되는 자바스크립트의 특징상 나중에 찾아서 고치기 어려움
-                call (option){
+                $call(option){
                     return new Promise(function (resolve, reject) {
                         let ajax = (document.createElement("iron-ajax"));
                         let url = option.url;
