@@ -82,48 +82,8 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                             throw new Error("요청에 필요한 url이 정의되지 않았습니다.");
                         }
 
-                        //자기 자신이 아닌 다른 도메인으로 붙는 경우
-                        if (option.remote) {
-                            ajax.url = _this.remote + url;
-                        } else {
-                            ajax.url = url;
-                        }
-
-                        if(option.dataType){
-                            ajax.handleAs = option.dataType;
-                        }
-
-                        _this.hasBeforeSend = !!(option.beforeSend);
-                        if (_this.hasBeforeSend) {
-                            _this.beforeSend = option.beforeSend;
-                        }
-
-                        if(option.data){
-                            ajax.contentType = "application/json";
-                            ajax.body = option.data;
-                        }
-
-                        ajax.method = option.type;
-
-                        ajax.headers["Authorization"] = localStorage.getItem("jwt_token");
-
-                        //해당 이벤트 핸들러를 generateRequest 보다 밑에 선언하면 이벤트 바인딩이 정상적으로 동작하지 않는다.
-                        ajax.addEventListener("iron-ajax-presend", function (event) {
-                            if(_this.hasBeforeSend){
-                                let xhr = event.detail.request.xhr;
-                                _this.beforeSend(xhr);
-                            }
-                        });
-
-                        //서버에서 에러 반환시 캐치하고 원인을 반환
-                        ajax.addEventListener("error", function (event) {
-                            let message = event.detail.request.xhr.response;
-                            let url = event.detail.request.url;
-                            reject({
-                                url: url,
-                                result: message
-                            });
-                        });
+                        //iron-ajax 컨텍스트 설정
+                        setRequestContext(option, ajax, url, reject);
 
                         ajax.generateRequest().completes.then(whenSuccess).catch(whenCatchError);
 
@@ -150,6 +110,51 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
                             reject({
                                 url: url,
                                 result: result
+                            });
+                        }
+
+                        function setRequestContext(option, ajax, url, reject) {
+                            //자기 자신이 아닌 다른 도메인으로 붙는 경우
+                            if (option.remote) {
+                                ajax.url = _this.remote + url;
+                            } else {
+                                ajax.url = url;
+                            }
+
+                            if (option.dataType) {
+                                ajax.handleAs = option.dataType;
+                            }
+
+                            _this.hasBeforeSend = !!(option.beforeSend);
+                            if (_this.hasBeforeSend) {
+                                _this.beforeSend = option.beforeSend;
+                            }
+
+                            if (option.data) {
+                                ajax.contentType = "application/json";
+                                ajax.body = option.data;
+                            }
+
+                            ajax.method = option.type;
+
+                            ajax.headers["Authorization"] = localStorage.getItem("jwt_token");
+
+                            //해당 이벤트 핸들러를 generateRequest 보다 밑에 선언하면 이벤트 바인딩이 정상적으로 동작하지 않는다.
+                            ajax.addEventListener("iron-ajax-presend", function (event) {
+                                if (_this.hasBeforeSend) {
+                                    let xhr = event.detail.request.xhr;
+                                    _this.beforeSend(xhr);
+                                }
+                            });
+
+                            //서버에서 에러 반환시 캐치하고 원인을 반환
+                            ajax.addEventListener("error", function (event) {
+                                let message = event.detail.request.xhr.response;
+                                let url = event.detail.request.url;
+                                reject({
+                                    url: url,
+                                    result: message
+                                });
                             });
                         }
                     });
