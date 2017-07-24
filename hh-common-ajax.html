@@ -18,8 +18,6 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
 <dom-module id="hh-common-ajax">
     <template>
         <style></style>
-        <!--TODO iron-ajax는 없앴다가 call 요청시마다 다시 생성시키는 방식으로 사용해야 함. 기존 값을 전부 초기화시키기 위함-->
-        <iron-ajax id="ajax"></iron-ajax>
     </template>
 
     <script>
@@ -73,25 +71,24 @@ iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
 
                 ready(){
                     super.ready();
-                    ajaxComponent = _this.$.ajax;
-                    ajaxComponent.addEventListener("iron-ajax-presend", function (event) {
-                        if(_this.hasBeforeSend){
-                            let xhr = event.detail.request.xhr;
-                            _this.beforeSend(xhr);
-                        }
-                    });
-                    ajaxComponent.addEventListener("error", function (event) {
-//                        debugger;debugger;
-                        let response = event.detail.request.xhr.response;
-                        let url = event.detail.request.url;
-                        // Error capture. 그러나 call에서 바로 잡도록 처리하는것이 에러 처리하기에 제일 좋은데.
-                    });
                 }
 
                 //FIXME 이름 변경해야 함. call은 너무 흔한 이름이라 소스 추적이 안되는 자바스크립트의 특징상 나중에 찾아서 고치기 어려움
-                //TODO iron-ajax에서 request 객체를 순간 생성하는 것처럼. iron-ajax 객체를 순간 생성하도록 변경해야 함.
                 call (option){
                     return new Promise(function (resolve, reject) {
+                        let ajaxComponent = (document.createElement("iron-ajax"));
+                        ajaxComponent.addEventListener("iron-ajax-presend", function (event) {
+                            if(_this.hasBeforeSend){
+                                let xhr = event.detail.request.xhr;
+                                _this.beforeSend(xhr);
+                            }
+                        });
+                        ajaxComponent.addEventListener("error", function (event) {
+//                        debugger;debugger;
+                            let response = event.detail.request.xhr.response;
+                            let url = event.detail.request.url;
+                            // Error capture. 그러나 call에서 바로 잡도록 처리하는것이 에러 처리하기에 제일 좋은데.
+                        });
                         let url = option.url;
                         if(!url){
                             throw new Error("요청에 필요한 url이 정의되지 않았습니다.");
